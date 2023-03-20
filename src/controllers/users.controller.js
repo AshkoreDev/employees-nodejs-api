@@ -8,7 +8,10 @@ export const getUsers = async (req, res) => {
     
     (rows.length <= 0)
       ? res.status(404).json({ message: 'USERS NOT FOUND.' })
-      : res.json(rows);
+      : res.json({ 
+          success: true,
+          data: rows
+        });
 
   } catch (error) {
 
@@ -27,7 +30,10 @@ export const getUser = async (req, res) => {
 
     (rows.length <= 0)
       ? res.status(404).json({ message: 'USER NOT FOUND.' })
-      : res.json(rows);
+      : res.json({ 
+          success: true,
+          data: rows
+        });
 
   } catch (error) {
 
@@ -44,7 +50,10 @@ export const createUser = async (req, res) => {
     
     const [rows] = await pool.query('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', [username, password, role]);
 
-    res.json({ id: rows.insertId, username, password, role });
+    res.json({
+      success: true,
+      data: { id: rows.insertId, username, password, role }
+    });
 
  } catch (error) {
    
@@ -66,7 +75,10 @@ export const updateUser = async (req, res) => {
 
     (result.affectedRows <= 0)
       ? res.status(404).json({ message: 'USER NOT FOUND.' })
-      : res.json(rows[0]);
+      : res.json({
+          success: true,
+          data: rows[0]
+        });
 
   } catch (error) {
     
@@ -85,7 +97,7 @@ export const deleteUser = async (req, res) => {
 
     (result.affectedRows <= 0)
       ? res.status(404).json({ message: 'USER NOT FOUND.' })
-      : res.sendStatus(204);
+      : res.res.json({ success: true });
 
   } catch (error) {
     

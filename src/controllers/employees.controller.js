@@ -8,7 +8,10 @@ export const getEmployees = async (req, res) => {
 
     (rows.length <= 0)
       ? res.status(404).json({ message: 'EMPLOYEES NOT FOUND.' })
-      : res.json(rows);
+      : res.json({ 
+          success: true,
+          data: rows
+        });
 
   } catch (error) {
 
@@ -27,7 +30,10 @@ export const getEmployee = async (req, res) => {
 
     (rows.length <= 0)
       ? res.status(404).json({ message: 'EMPLOYEE NOT FOUND.' })
-      : res.json(rows);
+      : res.json({ 
+          success: true,
+          data: rows
+        });
 
   } catch (error) {
 
@@ -38,13 +44,16 @@ export const getEmployee = async (req, res) => {
 
 export const createEmployee = async (req, res) => {
 
-  const { first_name, last_name, date_of_birth, gender, nationality, dni, telephone, email, address } = req.body;
+  const { dni, first_name, last_name, date_of_birth, gender, nationality, telephone, email, address } = req.body;
 
   try {
     
-    const [rows] = await pool.query('INSERT INTO employees (first_name, last_name, date_of_birth, gender, nationality, dni, telephone, email, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [first_name, last_name, date_of_birth, gender, nationality, dni, telephone, email, address]);
+    const [rows] = await pool.query('INSERT INTO employees (dni, first_name, last_name, date_of_birth, gender, nationality, telephone, email, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [dni, first_name, last_name, date_of_birth, gender, nationality, telephone, email, address]);
 
-    res.json({ id: rows.insertId, first_name, last_name, date_of_birth, gender, nationality, dni, telephone, email, address });
+    res.json({ 
+      success: true,
+      data: { id: rows.insertId, dni, first_name, last_name, date_of_birth, gender, nationality, telephone, email, address }
+    });
 
  } catch (error) {
    
@@ -56,17 +65,20 @@ export const createEmployee = async (req, res) => {
 export const updateEmployee = async (req, res) => {
 
   const { id } = req.params;
-  const { first_name, last_name, date_of_birth, gender, nationality, dni, telephone, email, address } = req.body;
+  const { dni, first_name, last_name, date_of_birth, gender, nationality, telephone, email, address } = req.body;
 
   try {
     
-    const [result] = await pool.query('UPDATE employees SET first_name=IFNULL(?, first_name), last_name=IFNULL(?, last_name), date_of_birth=IFNULL(?, date_of_birth), gender=IFNULL(?, gender), nationality=IFNULL(?, nationality), dni=IFNULL(?, dni), telephone=IFNULL(?, telephone), email=IFNULL(?, email), address=IFNULL(?, address) WHERE id=?', [first_name, last_name, date_of_birth, gender, nationality, dni, telephone, email, address, id]);
+    const [result] = await pool.query('UPDATE employees SET dni=IFNULL(?, dni), first_name=IFNULL(?, first_name), last_name=IFNULL(?, last_name), date_of_birth=IFNULL(?, date_of_birth), gender=IFNULL(?, gender), nationality=IFNULL(?, nationality), telephone=IFNULL(?, telephone), email=IFNULL(?, email), address=IFNULL(?, address) WHERE id=?', [dni, first_name, last_name, date_of_birth, gender, nationality, telephone, email, address, id]);
 
     const [rows] = await pool.query('SELECT * FROM employees WHERE id=?', [id]);
 
     (result.affectedRows <= 0)
       ? res.status(404).json({ message: 'EMPLOYEE NOT FOUND.' })
-      : res.json(rows[0]);
+      : res.json({ 
+        success: true,
+        data: rows[0]
+      });
 
   } catch (error) {
     
@@ -85,7 +97,10 @@ export const deleteEmployee = async (req, res) => {
 
     (result.affectedRows <= 0)
       ? res.status(404).json({ message: 'EMPLOYEE NOT FOUND.' })
-      : res.sendStatus(204);
+      : res.json({ 
+          success: true,
+          data: rows
+        });
 
   } catch (error) {
     
