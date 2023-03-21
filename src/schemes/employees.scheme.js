@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-
 const dni = Joi.string().min(10).max(30).messages({
   'string.base': 'The dni must be a string with numbers',
   'string.min': 'The dni must be larger than or equal to 10',
@@ -63,7 +62,6 @@ const address = Joi.string().min(5).max(100).messages({
 
 
 export const employeeCreateScheme = Joi.object({
-
   dni: dni,
   first_name: first_name.required(),
   last_name: last_name.required(),
@@ -77,7 +75,6 @@ export const employeeCreateScheme = Joi.object({
 });
 
 export const employeeUpdateScheme = Joi.object({
-  
   dni: dni,
   first_name: first_name,
   last_name: last_name,

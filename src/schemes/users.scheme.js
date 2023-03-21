@@ -19,14 +19,12 @@ const position = Joi.string().min(5).max(20).messages({
 });
 
 export const userCreateScheme = Joi.object({
-
   username: username.required(),
   password: password.required(),
   position: position.required()
 });
 
 export const userUpdateScheme = Joi.object({
-
   username: username,
   password: password,
   position: position
